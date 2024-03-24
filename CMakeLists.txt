@@ -4,4 +4,7 @@ project(operating_systems C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(operating_systems chapter-1/exercise-1.c
-        chapter-1/exercise-1.c)
+        chapter-1/exercise-1.c
+        chapter-2/exercise-2.c
+        chapter-2/exercise-3.c
+        chapter-2/exercise-4.c)
