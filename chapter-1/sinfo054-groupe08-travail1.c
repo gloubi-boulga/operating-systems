@@ -29,11 +29,7 @@ void processAlarmSignal() {
     printf ("Processing buffer : ");
     for (int i = 0; i < bufferIndex; i++) {
         int character = buffer[i];
-        if (character < 123 && character >= 97) {
-            printf("%c ", toupper(buffer[i]));
-        } else {
-            printf("%c ", buffer[i]);
-        }
+        printf("%c ", (character < 123 && character >= 97) ? toupper(character) : character);
         buffer[i] = '\0'; // Once printed reset to default
     }
     bufferIndex = 0;
@@ -51,7 +47,9 @@ void getCharacterInput() {
     while (1) {
         if (bufferIndex < MAX_BUFFER_VALUE) {
             char inputChar = getchar();
-            buffer[bufferIndex++] = inputChar;
+            if (inputChar != EOF && inputChar != '\n') {
+                buffer[bufferIndex++] = inputChar;
+            }
         } else {
             printf("Buffer capacity reached. Awaiting next signal to clear the buffer\n");
             pause();
