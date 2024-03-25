@@ -22,6 +22,12 @@ struct node {
     struct node* next;
 };
 
+bool isEven(int number) {
+    return number % 2 == 0;
+}
+
+enum ROTATION { EVEN, ODD };
+
 struct circular* mkcircular() {
     struct circular* list = malloc(sizeof(struct circular));
     list->size = 0;
@@ -32,7 +38,7 @@ struct circular* mkcircular() {
 void insert(struct circular* cycle, signed int elt) {
     struct node* newNode = malloc(sizeof(struct node));
     if (newNode == NULL) {
-        printf("Memory allocation failed");
+        printf("Problem while allocating memory.\n");
         return;
     }
 
@@ -52,13 +58,9 @@ void insert(struct circular* cycle, signed int elt) {
     cycle->size++;
 }
 
-bool isEven(int number) {
-    return number % 2 == 0;
-}
-
 signed int extract(struct circular* cycle) {
     if (cycle->head == NULL) {
-        printf("The list is empty");
+        printf("Empty list, nothing to extract.\n");
         return 0;
     }
 
@@ -82,27 +84,35 @@ signed int extract(struct circular* cycle) {
     return extractedValue;
 }
 
-struct node* rotateToEven(struct circular* cycle) {
+struct node* rotate(struct circular* cycle, enum ROTATION rotation) {
+
     struct node* current = cycle->head;
-    while (!isEven(current->value)) {
-        current = current->next;
+
+    if (rotation == EVEN) {
+        while (!isEven(current->value)) {
+            current = current->next;
+        }
+    } else if (rotation == ODD) {
+        while (isEven(current->value)) {
+            current = current->next;
+        }
     }
+
     cycle->head = current;
     return current;
 }
 
+struct node* rotateToEven(struct circular* cycle) {
+    return rotate(cycle, EVEN);
+}
+
 struct node* rotateToOdd(struct circular* cycle) {
-    struct node* current = cycle->head;
-    while (isEven(current->value)) {
-        current = current->next;
-    }
-    cycle->head = current;
-    return current;
+    return rotate(cycle, ODD);
 }
 
 void displayCircular(struct circular* cycle) {
     if (cycle->head == NULL) {
-        printf("La liste circulaire est vide.\n");
+        printf("Empty list, nothing to display.\n");
         return;
     }
     struct node* current = cycle->head;
@@ -138,6 +148,5 @@ int main() {
     rotateToOdd(list2);
     displayCircular(list2);
 
-
-    return 0;
+    return EXIT_SUCCESS;
 }
